@@ -86,6 +86,94 @@ starwars_dt[1:2, .(alias = name, crib = homeworld)][]
 starwars_dt[1:5, ] %>% 
   select(crib = homeworld, everything())
 
+DT = data.table(x=1:10, y = LETTERS[1:10], key = "x")
+DT = as.data.table(DF, key = "x")
+setDT(DF, key = "x")
+
+storms_dt_key = as.data.table(storms, key = c("name", "year", "month", "day"))
+## collapse function for this keyed data.table. Everythin else stays the same
+collapse_dt_key = function() {
+  storms_dt_key[, .(wind=mean(wind), pressure = mean(pressure), category = first(category)), 
+                by = .(name, year, month, day)]
+}
+## Run the benchmark on all three functions
+microbenchmark(collapse_dplyr(), collapse_dt(), collapse_dt_key(), times = 10)
+
+
+library(nycflights13)
+flights_dt = as.data.table(flights)
+planes_dt = as.data.table(planes)
+
+# for dpylr 
+library(dplyr)
+left_join(
+  flights, planes, by = "tailnum"
+)
+
+merge(
+  flights_dt, 
+  planes_dt,
+  all.x = TRUE, ## omit for inner join
+  by = "tailnum")
+
+## Reshaping the data 
+stocks = data.table(time = as.Date('2009-01-01') + 0:1,
+                    X = rnorm(2, 0, 1),
+                    Y = rnorm(2, 0, 2),
+                    Z = rnorm(2, 0, 4))
+
+melt(stocks, id.vars = "time")
+stocks %>% 
+  dt_pivot_longer(X:Z, names_to = "stocks", values_to = "price")
+
+stocks_long = melt(stocks, id.vars = "time", 
+                   variable.name = "stock", value.name = "price")
+stocks_long
+
+dcast(stocks_long, 
+      time ~ stock, 
+      value.var = "price")
+stocks_long %>% 
+  dt_pivot_wider(names_from = stock,
+                 values_from = price)
+
+## 
+## Workflow
+## 
+
+library(ggplot2)
+storms_dt[, .(wind=mean(wind), 
+              pressure=mean(pressure),
+              category=first(category)),
+          by = .(name, year, month, day)] %>% 
+  ggplot(aes(x = pressure, y = wind, col = category)) + 
+  geom_point(alpha = 0.3) + 
+  theme_minimal()
+
+starwars_dt %>% 
+  group_by(homeworld) %>% 
+  summarize(height = mean(height, na.rm = T))
+
+storms_dtplyr = lazy_dt(storms)
+collapse_dtplyr = function() {
+  storms_dtplyr %>% 
+    group_by(name, year, month, day) %>% 
+    summarize(wind = mean(wind), pressure = mean(pressure), category = first(category)) %>% 
+    as_tibble()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
