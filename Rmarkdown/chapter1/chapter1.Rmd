@@ -1,0 +1,118 @@
+---
+title: "Microeconometrics"
+subtitle: "Introduction"
+author: "Hong Seok Kim"
+date: "Hanyang University </br> `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    chakra: "https://cdnjs.cloudflare.com/ajax/libs/remark/0.14.0/remark.min.js"
+    lib_dir: libs
+    css: [default, "../css/scpo.css", "../css/scpo-fonts.css"]
+    nature:
+      beforeInit: ["../js/ru_xaringan.js"]
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      in_header: "../libs/partials/header.html"
+---
+
+layout: true
+
+<div class="my-footer"><img src="../img/logo/ScPo-shield.png" style="height: 60px;"/></div> 
+
+---
+
+```{r setup, include = FALSE, warning = FALSE, message = FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  dev = "svg",
+  cache = TRUE,
+  fig.align = "center"
+  #fig.width = 11,
+  #fig.height = 5
+)
+
+# Load packages
+library(dplyr)
+library(magrittr)
+library(tidyverse)
+library(pander)
+library(ggthemes)
+library(maptools)
+library(knitr)
+```
+
+
+
+# Welcome to ScPoEconometrics!
+
+--
+
+- In this course you will learn the core tools of ***econometrics***.
+ 
+--
+
+- You will also learn to use the `R` programming language!
+
+--
+
+## What is *econometrics*?
+
+- A set of techniques and methods to answer questions with data.
+
+- Econometrics shares many things with *applied statistics* and *machine learning*.
+
+- Some examples!
+
+---
+
+class: inverse
+
+# Task 3 (10 minutes)
+
+1. How many observations are there in `murders`?
+
+1. How many variables? What are the data types of each variable?
+
+1. Notice that the colon operator `a:b` is just short for *construct a sequence from `a` to `b`*. Create a new object `murders_2` containing the rows 10 to 25 of `murders`.
+
+1. Create a new object `murders_3` which only contains the columns `state` and `total`. (Recall that `c` creates vectors.)
+
+1. What is the average value of `total`?
+
+1. What is the average value of `total` for state's in the "South", i.e. with `region == "South"`?
+
+1. Create a total_percap variable:
+    ```{r}
+    murders$total_percap = (murders$total / murders$population) * 10000
+    ```
+
+Congratulations, you've created your first variable!
+
+---
+
+class: title-slide-final, middle
+background-image: url(../img/logo/ScPo-econ.png)
+background-size: 250px
+background-position: 9% 19%
+
+# SEE YOU NEXT WEEK!
+
+
+
+
+|                                                                                                            |                                   |
+| :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
+| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
+| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
+| <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
+
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter1.html chapter1.pdf --chrome-arg=--disable-web-security")
+```
